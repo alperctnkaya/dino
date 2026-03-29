@@ -33,6 +33,7 @@ from torchvision import models as torchvision_models
 import utils
 import vision_transformer as vits
 from vision_transformer import DINOHead
+from hotel_dataset import HotelDatasetDINO
 
 torchvision_archs = sorted(name for name in torchvision_models.__dict__
     if name.islower() and not name.startswith("__")
@@ -142,7 +143,10 @@ def train_dino(args):
         args.local_crops_scale,
         args.local_crops_number,
     )
-    dataset = datasets.ImageFolder(args.data_path, transform=transform)
+    # dataset = datasets.ImageFolder(args.data_path, transform=transform)
+   
+    dataset = HotelDatasetDINO(transform=transform)
+
     sampler = torch.utils.data.DistributedSampler(dataset, shuffle=True)
     data_loader = torch.utils.data.DataLoader(
         dataset,
