@@ -18,9 +18,9 @@ cd /SEAS/home/g45307115/dino
 
 export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
 
-python run_with_submitit.py --nodes 2 --ngpus 4 --arch vit_tiny --num_workers 16 --batch_size_per_gpu 64 --epochs 100 --output_dir /SEAS/home/g45307115/dino/vit_tiny_logs
+python run_with_submitit.py --nodes 2 --ngpus 4 --gpu_type v100 --arch vit_tiny --num_workers 16 --batch_size_per_gpu 64 --epochs 100 --output_dir /SEAS/home/g45307115/dino/vit_tiny_logs
 
 
 torchrun --nproc_per_node=4 main_dino.py --arch vit_tiny --num_workers 16 --batch_size_per_gpu 64 --epochs 100 --output_dir /SEAS/home/g45307115/dino/vit_tiny_logs
 
-python run_with_submitit.py --nodes 2 --ngpus 4 --arch vit_tiny --num_workers 16 --batch_size_per_gpu 64 --epochs 100 --output_dir /SEAS/home/g45307115/dino/vit_tiny_logs --partition large-gpu
+python run_with_submitit.py --nodes 2 --ngpus 4 --gpu_type v100 --arch vit_tiny --num_workers 16 --batch_size_per_gpu 64 --epochs 100 --output_dir /SEAS/home/g45307115/dino/vit_tiny_logs --partition large-gpu

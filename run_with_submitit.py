@@ -31,6 +31,7 @@ def parse_args():
     parser.add_argument("--timeout", default=2800, type=int, help="Duration of the job")
 
     parser.add_argument("--partition", default="learnfair", type=str, help="Partition where to submit")
+    parser.add_argument("--gpu_type", default=None, type=str, help="Type of GPU to request (e.g. 'v100', 'a100')")
     parser.add_argument("--use_volta32", action='store_true', help="Big models? Use this")
     parser.add_argument('--comment', default="", type=str,
                         help='Comment to pass to scheduler, e.g. priority message')
@@ -99,6 +100,11 @@ def main():
 
     partition = args.partition
     kwargs = {}
+    if args.gpu_type:
+        kwargs['slurm_gres'] = f'gpu:{args.gpu_type}:{num_gpus_per_node}'
+    else:
+        kwargs['gpus_per_node'] = num_gpus_per_node
+
     if args.use_volta32:
         kwargs['slurm_constraint'] = 'volta32gb'
     if args.comment:
@@ -106,7 +112,6 @@ def main():
 
     executor.update_parameters(
         mem_gb=40 * num_gpus_per_node,
-        gpus_per_node=num_gpus_per_node,
         tasks_per_node=num_gpus_per_node,  # one task per GPU
         cpus_per_task=10,
         nodes=nodes,
