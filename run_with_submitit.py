@@ -116,6 +116,7 @@ def main():
         slurm_signal_delay_s=120,
         slurm_setup=[
             "module load python3/3.13.3",
+            "module load cuda/12.9",
             "source /SEAS/home/g45307115/venvs/transformers/bin/activate",
             "export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH",
             "cd /SEAS/home/g45307115/dino"
