@@ -471,6 +471,13 @@ def init_distributed_mode(args):
         args.world_size = int(os.environ['WORLD_SIZE'])
         args.gpu = int(os.environ['LOCAL_RANK'])
     # launched with submitit on a slurm cluster
+    # When submitit is used, args.rank, args.gpu, and args.world_size are
+    # already set correctly by Trainer._setup_gpu_args(). We detect this by
+    # checking for the dist_url that submitit sets (file:// URI).
+    elif hasattr(args, 'dist_url') and args.dist_url.startswith('file://'):
+        # submitit already configured rank, gpu, and world_size — use them.
+        print(f"Submitit detected: rank={args.rank}, gpu={args.gpu}, "
+              f"world_size={args.world_size}", flush=True)
     elif 'SLURM_PROCID' in os.environ:
         args.rank = int(os.environ['SLURM_PROCID'])
         args.gpu = args.rank % torch.cuda.device_count()
@@ -493,8 +500,8 @@ def init_distributed_mode(args):
     )
 
     torch.cuda.set_device(args.gpu)
-    print('| distributed init (rank {}): {}'.format(
-        args.rank, args.dist_url), flush=True)
+    print('| distributed init (rank {}, gpu {}): {}'.format(
+        args.rank, args.gpu, args.dist_url), flush=True)
     dist.barrier()
     setup_for_distributed(args.rank == 0)
 

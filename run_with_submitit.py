@@ -124,6 +124,10 @@ def main():
             "module load cuda/12.9",
             "source /SEAS/home/g45307115/venvs/transformers/bin/activate",
             "export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH",
+            "export NCCL_DEBUG=INFO",
+            # Use eno0 for TCP socket fallback, ib0 for InfiniBand RDMA
+            "export NCCL_SOCKET_IFNAME=eno0",
+            "export NCCL_IB_DISABLE=0",
             "cd /SEAS/home/g45307115/dino"
         ],
         **kwargs
