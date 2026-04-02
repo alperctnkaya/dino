@@ -125,9 +125,10 @@ def main():
             "source /SEAS/home/g45307115/venvs/transformers/bin/activate",
             "export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH",
             "export NCCL_DEBUG=INFO",
-            # Use eno0 for TCP socket fallback, ib0 for InfiniBand RDMA
+            # Force socket transport over eno0 (MTU 9000 / jumbo frames).
+            # IB causes 'wrong type' handshake errors with NCCL 2.27.5.
             "export NCCL_SOCKET_IFNAME=eno0",
-            "export NCCL_IB_DISABLE=0",
+            "export NCCL_IB_DISABLE=1",
             "cd /SEAS/home/g45307115/dino"
         ],
         **kwargs
